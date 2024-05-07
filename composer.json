@@ -1,0 +1,17 @@
+{
+    "name": "ilias/php_http_request_handler",
+    "description": "A PHP http requests handler template",
+    "type": "false",
+    "autoload": {
+        "psr-4": {
+            "Ilias\\PhpHttpRequestHandler\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Murilo Elias",
+            "email": "murilo7456@gmail.com"
+        }
+    ],
+    "require": {}
+}
