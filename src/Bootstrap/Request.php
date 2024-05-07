@@ -5,6 +5,9 @@ use Ilias\PhpHttpRequestHandler\Bootstrap\Handler;
 
 class Request
 {
+    public static array $requestResponse;
+    public static string $requestResponseStatus;
+
     public static function AddHeader(string $name, string $content, bool $replace = true) {
         try {
             header("{$name}: {$content}", $replace);
@@ -13,14 +16,15 @@ class Request
             Handler::HandleException($th);
         }
     }
-    public static function header()
+    public static function Header()
     {
         // TODO
     }
 
     public static function Answer()
     {
-        echo json_encode(Handler::$requestResponse);
+        self::$requestResponseStatus["code"] = http_response_code();
+        echo json_encode(["status" => self::$requestResponseStatus, ...self::$requestResponse]);
     }
 
     public static function JsonResponse()
