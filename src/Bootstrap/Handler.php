@@ -10,7 +10,7 @@ class Handler
     {
         /* Request handling example */
         Request::JsonResponse();
-        self::$requestResponse["response"] = "Test message!";
+        self::$requestResponse["response"] = ["ping" => "pong"];
 
         Request::Answer();
     }

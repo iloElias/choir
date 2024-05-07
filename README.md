@@ -1,6 +1,8 @@
 # PHP HTTP Request Handler Template with Nginx
 This GitHub repository provides a comprehensive Nginx server setup optimized for PHP applications, specifically tailored for deploying web APIs. It includes a ready-to-use template designed to streamline the development and deployment process on Railway platforms. This setup is ideal for developers looking to quickly and efficiently launch PHP-based APIs with Nginx, ensuring compatibility and performance on Railway deployments.
 
+*Informações traduzidas para português em `./info/`*
+
 # Dependencies
 This template has some dependencies that need to be installed on your current workspace:
 - **Docker**: Mainly used for local testing
