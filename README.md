@@ -20,6 +20,7 @@ Build your custom Docker Image running `./docker/build.sh`
 
 # 3rd Step: Running Docker
 `docker-compose up`: Standalone version
+
 `docker-compose up -d`: Daemon version
 
 # 4th Step: Check your browser
