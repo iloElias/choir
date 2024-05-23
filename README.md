@@ -18,10 +18,25 @@ In your local host machine add the following lines to your `/etc/hosts` file in 
 # 2nd Step: Preparing the environment
 Build your custom Docker Image running `./docker/build.sh`
 
+### Exceptions
+- In case you are having some permission troubles, use `sudo` to execute the fallowing files
+
+
 # 3rd Step: Running Docker
 `docker-compose up`: Standalone version
 
 `docker-compose up -d`: Daemon version
+
+### Exceptions
+- If the daemon is not allawing you to use the `0.0.0.0:80` port, change the `docker-compose.yml` file to expose the port 81:
+```yml
+    expose:
+      - 3000
+      - 81
+    ports:
+      - 3000:3000
+      - 81:81
+```
 
 # 4th Step: Check your browser
 Open http://your.dev.api.com/ and check the headers on your devtools, and you should see this entry `ping: "pong"`.

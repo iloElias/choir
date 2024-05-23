@@ -17,10 +17,24 @@ Em sua maquina de trabalho, adicione a seguinte linha de instrução no arquivo 
 # 2º Passo: Preparando o ambiente
 Construir a sua imagem Docker personalizada executando: `./docker/build.sh`
 
+### Exceções
+- Em caso de problemas com permissão, use `sudo` para executar os arquivos
+
 # 3º Passo: Rodando o Docker
 `docker-compose up`: Versão standalone
 
 `docker-compose up -d`: Versão daemon
+
+### Exceptions
+- Se o **daemon** não está permitindo o uso da porta `0.0.0.0:80`, mude o arquivo `docker-compose.yml` para que ele exponha a porta 81:
+```yml
+    expose:
+      - 3000
+      - 81
+    ports:
+      - 3000:3000
+      - 81:81
+```
 
 # 4º Passo: Cheque seu navegador
 Abra http://your.dev.api.com/, você deve ver a seguinte entrada: `ping: "pong"`.

@@ -16,9 +16,9 @@ RUN rc-status
 RUN apk add nginx
 RUN rc-update add nginx
 
-RUN apk add php81
-RUN apk add php81-fpm
-RUN apk add php81-pdo
-RUN apk add php81-curl
-RUN apk add php81-pgsql
-RUN apk add php81-pdo_pgsql
+RUN apk add php
+RUN apk add php-fpm
+RUN apk add php-pdo
+RUN apk add php-curl
+RUN apk add php-pgsql
+RUN apk add php-pdo_pgsql

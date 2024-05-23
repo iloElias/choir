@@ -9,8 +9,8 @@ services:
       - ./:/app/
     expose:
       - 3000
-      - 80
+      - 81
     ports:
       - 3000:3000
-      - 80:80
+      - 81:81
     command: "/./app/docker/nginx/start.sh"
