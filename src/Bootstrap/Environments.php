@@ -10,7 +10,8 @@ class Environments
 
         try {
             $envContent = file_get_contents($envFile);
-        } catch (\Throwable $throwable) {
+        } catch (\Throwable $th) {
+            Handler::handleException($th);
         }
 
         $envLines = explode("\n", $envContent);

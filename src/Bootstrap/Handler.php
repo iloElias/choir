@@ -22,8 +22,9 @@ class Handler
       Request::$requestResponse["request"]["uri"] = Router::$uri;
       Request::$requestResponse["request"]["params"] = Router::$params;
       Request::$requestResponse["request"]["query"] = Request::$requestQuery;
-    
-      // Request::$requestResponse["data"]["request"] = $GLOBALS;
+      Request::$requestResponse["data"]["request"] = $GLOBALS;
+
+      // Request::$requestResponse = Router::handle();
 
       Request::answer();
     } catch (\Throwable $th) {

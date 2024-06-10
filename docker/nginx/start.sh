@@ -6,7 +6,7 @@ service nginx restart
 
 rm -rf /etc/php81
 cp -R /app/config/php81 /etc/php81
-service php-fpm81 restart
+service php8.1-fpm restart
 
 # Keep Container Running
 tail -f /dev/null

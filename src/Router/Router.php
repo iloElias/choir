@@ -15,10 +15,10 @@ class Router
 
   public static function setup()
   {
-    self::$uri = explode("?", $_SERVER["REQUEST_URI"])[0];
+    self::$uri = explode("?", $_SERVER["REQUEST_URI"] ?? '')[0];
   }
 
-  public static function handle()
+  public static function handle(): null|array
   {
     $method = strtolower($_SERVER['REQUEST_METHOD']);
     foreach (self::$routes[$method] ?? [] as $route => $config) {
@@ -29,6 +29,7 @@ class Router
 
     http_response_code(404);
     echo json_encode(['error' => 'Route not found']);
+    return null;
   }
 
   private static function matchRoute($routePattern, &$params)
