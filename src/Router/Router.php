@@ -80,6 +80,7 @@ class Router
     }
 
     http_response_code(404);
+    Request::appendResponse("message", "Route not found");
   }
 
   private static function matchRoute($route, $method, $uri)
