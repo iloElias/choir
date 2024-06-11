@@ -42,7 +42,7 @@ class Request
   public static function answer()
   {
     self::$requestResponseStatus = http_response_code();
-    echo json_encode(["status" => self::$requestResponseStatus, ...self::$requestResponse]);
+    echo json_encode(["status" => ["code" => self::$requestResponseStatus], ...self::$requestResponse]);
   }
 
   public static function jsonResponse()

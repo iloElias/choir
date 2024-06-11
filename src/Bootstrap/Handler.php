@@ -21,15 +21,15 @@ class Handler
 
       Request::answer();
     } catch (\Throwable $th) {
+      http_response_code(500);
       self::handleException($th);
     }
   }
 
   public static function handleException(\Throwable $th)
   {
-    Request::$requestResponseStatus = "Internal exception";
     Request::$requestResponse["message"] = $th->getMessage();
-    Request::$requestResponse["exception"] = $th;
+    Request::$requestResponse["exception"] = get_object_vars($th);
 
     Request::answer();
   }

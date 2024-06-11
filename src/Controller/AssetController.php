@@ -21,6 +21,12 @@ class AssetController
     Request::$requestResponse = [
       "params" => Request::$requestParams
     ];
+
+    // $assetType = Request::getParams()[""];
+    // $assetIdentifier = Request::getParams()[""];
+
+    // $assetLoader = new Asset();
+    // $assetLoader->loadAsset($assetType, $assetIdentifier);
   }
 
   public static function getImageById()

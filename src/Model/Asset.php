@@ -14,8 +14,10 @@ class Asset
 
   public function loadAsset(string $assetType, string|int $assetIdentifier)
   {
+    $assetType = ucfirst($assetType);
     $this->assetFolderPath .= "/{$assetType}/{$assetIdentifier}";
     if (file_exists($this->assetFolderPath)) {
+      header('Content-Type: image/x-icon');
       readfile($this->assetFolderPath);
       return;
     }
