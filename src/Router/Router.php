@@ -18,21 +18,21 @@ class Router
     self::$uri = explode("?", $_SERVER["REQUEST_URI"] ?? '')[0];
   }
 
-  public static function handle(): null|array
+  public static function handle()
   {
     $method = strtolower($_SERVER['REQUEST_METHOD']);
     foreach (self::$routes[$method] ?? [] as $route => $config) {
-      if (self::matchRoute($route, $params)) {
-        return self::executeRouteProcedure($method, $route, $params);
+      if (self::matchRoute($route)) {
+        self::executeRouteProcedure($method, $route);
+        return;
       }
     }
 
     http_response_code(404);
-    echo json_encode(['error' => 'Route not found']);
-    return null;
+    Request::$requestResponse = ['error' => 'Route not found'];
   }
 
-  private static function matchRoute($routePattern, &$params)
+  private static function matchRoute($routePattern)
   {
     $regex = str_replace('/', '\/', preg_replace('/\{([\w]+)\}/', '(?P<$1>[\w-]+)', $routePattern));
     $regex = "/^" . $regex . "$/";
@@ -40,7 +40,7 @@ class Router
     if (preg_match($regex, self::$uri, $matches)) {
       foreach ($matches as $key => $value) {
         if (is_string($key)) {
-          $params[$key] = $value;
+          self::$params[$key] = $value;
         }
       }
       return true;
@@ -92,9 +92,9 @@ class Router
     }
   }
 
-  private static function executeRouteProcedure(string $method, string $route, array $params)
+  private static function executeRouteProcedure(string $method, string $route)
   {
-    [[$className, $classMethod], $middleware] = self::$routes[$method][$route] ?? null;
+    [[$className, $classMethod], $middleware] = self::$routes[strtolower($method)][$route];
 
     if (!$className || !$classMethod) {
       http_response_code(404);
@@ -111,8 +111,7 @@ class Router
     }
 
     try {
-      $classMethodResult = call_user_func_array([$className, $classMethod], $params);
-      echo json_encode($classMethodResult);
+      call_user_func([$className, $classMethod]);
     } catch (Throwable $throwable) {
       http_response_code(500);
       throw new \Exception($throwable->getMessage() . " " . $throwable->getFile() . " " . $throwable->getLine() . " Trace" . $throwable->getTraceAsString(), $throwable->getCode(), $throwable);

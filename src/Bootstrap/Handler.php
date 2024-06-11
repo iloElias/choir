@@ -16,15 +16,15 @@ class Handler
       Routes::setup();
       Request::jsonResponse();
       Request::setRequestInfo();
-      Request::$requestResponse["message"] = ["ping" => "pong"];
-      Request::$requestResponse["data"] = [];
-      Request::$requestResponse["request"]["request_method"] = Request::$requestMethod;
-      Request::$requestResponse["request"]["uri"] = Router::$uri;
-      Request::$requestResponse["request"]["params"] = Router::$params;
-      Request::$requestResponse["request"]["query"] = Request::$requestQuery;
-      Request::$requestResponse["data"]["request"] = $GLOBALS;
+      // Request::$requestResponse["message"] = ["ping" => "pong"];
+      // Request::$requestResponse["data"] = [];
+      // Request::$requestResponse["request"]["request_method"] = Request::$requestMethod;
+      // Request::$requestResponse["request"]["uri"] = Router::$uri;
+      // Request::$requestResponse["request"]["params"] = Router::$params;
+      // Request::$requestResponse["request"]["query"] = Request::$requestQuery;
+      // Request::$requestResponse["data"]["request"] = $GLOBALS;
 
-      // Request::$requestResponse = Router::handle();
+      Router::handle();
 
       Request::answer();
     } catch (\Throwable $th) {

@@ -6,11 +6,11 @@ use Ilias\PhpHttpRequestHandler\Bootstrap\Handler;
 
 class Request
 {
-  public static $requestResponseStatus;
-  public static $requestResponse;
-  public static $requestMethod;
-  public static $requestQuery;
-
+  public static array $requestResponse = [];
+  public static array $requestQuery;
+  public static string $requestResponseStatus;
+  public static string $requestMethod;
+  
   public static function setRequestInfo()
   {
     self::$requestMethod = $_SERVER["REQUEST_METHOD"] ?? "";
@@ -19,7 +19,7 @@ class Request
 
   public static function answer()
   {
-    self::$requestResponseStatus["code"] = http_response_code();
+    self::$requestResponseStatus = http_response_code();
     echo json_encode(["status" => self::$requestResponseStatus, ...self::$requestResponse]);
   }
 
