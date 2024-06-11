@@ -3,118 +3,118 @@
 namespace Ilias\PhpHttpRequestHandler\Router;
 
 use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
-use Ilias\PhpHttpRequestHandler\Exceptions\DuplicatedRouteException;
 use Ilias\PhpHttpRequestHandler\Middleware\Middleware;
-use Throwable;
 
 class Router
 {
-  public static $routes = [];
-  public static $params = [];
-  public static $uri = "";
+  private static $routes = [];
+  private static $routeGroups = [];
+  private static $baseMiddleware = [];
 
   public static function setup()
   {
-    self::$uri = explode("?", $_SERVER["REQUEST_URI"] ?? '')[0];
+    $uri = explode("?", $_SERVER["REQUEST_URI"])[0];
+    $method = $_SERVER["REQUEST_METHOD"];
+    self::dispatch($method, $uri);
   }
 
-  public static function handle()
+  public static function addRoute(Route $route)
   {
-    $method = strtolower($_SERVER['REQUEST_METHOD']);
-    foreach (self::$routes[$method] ?? [] as $route => $config) {
-      if (self::matchRoute($route)) {
-        self::executeRouteProcedure($method, $route);
+    self::$routes[] = $route;
+  }
+
+  public static function get(string $uri, string $action, array $middleware = [])
+  {
+    self::addRoute(
+      new Route('GET', $uri, $action, $middleware)
+    );
+  }
+
+  public static function post(string $uri, string $action, array $middleware = [])
+  {
+    self::addRoute(
+      new Route('POST', $uri, $action, $middleware)
+    );
+  }
+
+  public static function put(string $uri, string $action, array $middleware = [])
+  {
+    self::addRoute(
+      new Route('PUT', $uri, $action, $middleware)
+    );
+  }
+
+  public static function delete(string $uri, string $action, array $middleware = [])
+  {
+    self::addRoute(
+      new Route('DELETE', $uri, $action, $middleware)
+    );
+  }
+
+  public static function group(array $attributes, callable $callback)
+  {
+    $prefix = $attributes['prefix'] ?? '';
+    $middleware = $attributes['middleware'] ?? [];
+    $group = new RouterGroup($prefix, array_merge(self::$baseMiddleware, $middleware));
+    self::$routeGroups[] = $group;
+
+    call_user_func($callback, $group);
+  }
+
+  public static function dispatch($method, $uri)
+  {
+    foreach (self::$routes as $route) {
+      if (self::matchRoute($route, $method, $uri)) {
+        self::handleRoute($route);
         return;
       }
     }
 
-    http_response_code(404);
-    Request::$requestResponse = ['error' => 'Route not found'];
-  }
-
-  private static function matchRoute($routePattern)
-  {
-    $regex = str_replace('/', '\/', preg_replace('/\{([\w]+)\}/', '(?P<$1>[\w-]+)', $routePattern));
-    $regex = "/^" . $regex . "$/";
-
-    if (preg_match($regex, self::$uri, $matches)) {
-      foreach ($matches as $key => $value) {
-        if (is_string($key)) {
-          self::$params[$key] = $value;
+    foreach (self::$routeGroups as $group) {
+      foreach ($group->routes as $route) {
+        if (self::matchRoute($route, $method, $uri)) {
+          self::handleRoute($route);
+          return;
         }
       }
+    }
+
+    http_response_code(404);
+  }
+
+  private static function matchRoute($route, $method, $uri)
+  {
+    if ($route->method !== $method) {
+      return false;
+    }
+
+    $pattern = preg_replace('/\{([\w]+)\}/', '([\w-]+)', $route->uri);
+    $pattern = str_replace('/', '\/', $pattern);
+    $pattern = '/^' . $pattern . '$/';
+
+    if (preg_match($pattern, $uri, $matches)) {
+      $params = [];
+      preg_match_all('/\{([\w]+)\}/', $route->uri, $paramNames);
+      foreach ($paramNames[1] as $index => $name) {
+        $params[$name] = $matches[$index + 1];
+      }
+      Request::$requestParams = $params;
       return true;
     }
+
     return false;
   }
 
-  private static function setRoute(string $method, string $route, array $instruction, array $middleware = null)
+  private static function handleRoute($route)
   {
-    if (!str_starts_with($route, '/')) {
-      $route = '/' . $route;
-    }
-
-    $route = strtolower($route);
-
-    if (isset(self::$routes[$method][$route])) {
-      throw new DuplicatedRouteException("Duplicated routes cannot be set");
-    }
-
-    self::$routes[$method][$route] = [$instruction, $middleware];
-  }
-
-  public static function get(string $route, array $instruction, array $middleware = null)
-  {
-    self::setRoute('get', $route, $instruction, $middleware);
-  }
-
-  public static function post(string $route, array $instruction, array $middleware = null)
-  {
-    self::setRoute('post', $route, $instruction, $middleware);
-  }
-
-  public static function put(string $route, array $instruction, array $middleware = null)
-  {
-    self::setRoute('put', $route, $instruction, $middleware);
-  }
-
-  public static function delete(string $route, array $instruction, array $middleware = null)
-  {
-    self::setRoute('delete', $route, $instruction, $middleware);
-  }
-
-  private static function executeMiddlewares(array $middlewareList)
-  {
-    foreach ($middlewareList as $middleware) {
+    foreach ($route->middleware as $middleware) {
       if (is_subclass_of($middleware, Middleware::class)) {
         $middleware::handle();
       }
     }
-  }
 
-  private static function executeRouteProcedure(string $method, string $route)
-  {
-    [[$className, $classMethod], $middleware] = self::$routes[strtolower($method)][$route];
-
-    if (!$className || !$classMethod) {
-      http_response_code(404);
-      throw new \Exception(sprintf('API route not found: %s on %s', $method, $route));
-    }
-
-    if (!empty($middleware)) {
-      try {
-        self::executeMiddlewares($middleware);
-      } catch (Throwable $e) {
-        http_response_code(401);
-        throw new \Exception("This request does not pass by middleware terms: " . $e->getMessage(), $e->getCode(), $e);
-      }
-    }
-
-    try {
-      call_user_func([$className, $classMethod]);
-    } catch (Throwable $throwable) {
-      http_response_code(500);
-      throw new \Exception($throwable->getMessage() . " " . $throwable->getFile() . " " . $throwable->getLine() . " Trace" . $throwable->getTraceAsString(), $throwable->getCode(), $throwable);
-    }
+    [$controller, $method] = explode('@', $route->action);
+    $controllerInstance = new $controller;
+    call_user_func([$controllerInstance, $method]);
   }
 }

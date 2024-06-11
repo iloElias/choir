@@ -3,7 +3,9 @@
 namespace Ilias\PhpHttpRequestHandler\Controller;
 
 use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+use Ilias\PhpHttpRequestHandler\Model\Asset;
 use Ilias\PhpHttpRequestHandler\Model\Greed;
+use Ilias\PhpHttpRequestHandler\Router\Router;
 
 class IndexController
 {
@@ -15,17 +17,10 @@ class IndexController
 
   public static function favicon()
   {
-    $filePath = __DIR__ . '/../Assets/Images/favicon.ico';
+    $assetType = Request::getParams()[""];
+    $assetIdentifier = Request::getParams()[""];
 
-    if (file_exists($filePath)) {
-      header('Content-Type: image/x-icon');
-
-      readfile($filePath);
-    } else {
-      http_response_code(404);
-      echo '404 Not Found';
-    }
-
-    exit;
+    $assetLoader = new Asset();
+    $assetLoader->loadAsset($assetType, $assetIdentifier);
   }
 }

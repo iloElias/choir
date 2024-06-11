@@ -3,7 +3,6 @@
 namespace Ilias\PhpHttpRequestHandler\Controller;
 
 use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
-use Ilias\PhpHttpRequestHandler\Router\Router;
 
 class AssetController
 {
@@ -20,14 +19,14 @@ class AssetController
   public static function getImageByName()
   {
     Request::$requestResponse = [
-      "params" => Router::$params
+      "params" => Request::$requestParams
     ];
   }
 
   public static function getImageById()
   {
     Request::$requestResponse = [
-      "params" => Router::$params
+      "params" => Request::$requestParams
     ];
   }
 }
