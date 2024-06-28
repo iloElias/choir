@@ -15,7 +15,7 @@ class Router
   {
     $uri = explode("?", $_SERVER["REQUEST_URI"])[0];
     $method = $_SERVER["REQUEST_METHOD"];
-    self::dispatch($method, $uri);
+    self::dispatch($method, str_ends_with($uri, "/") ? substr($uri, 0, -1) : $uri);
   }
 
   public static function addRoute(Route $route)

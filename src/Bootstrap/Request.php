@@ -49,4 +49,9 @@ class Request
   {
     header("Content-Type: application/json; charset=UTF-8", true);
   }
+  
+  public static function htmlResponse()
+  {
+    header("Content-Type: text/html; charset=UTF-8", true);
+  }
 }
