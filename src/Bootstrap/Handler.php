@@ -15,7 +15,7 @@ class Handler
     try {
       Routes::setup();
       Request::jsonResponse();
-      Request::setRequestInfo();
+      Request::setup();
       
       Router::setup();
 

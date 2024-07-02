@@ -6,18 +6,26 @@ class Request
   public static array $requestResponse = [];
   public static array $requestParams = [];
   public static array $requestQuery;
+  private static bool $hasBody = false;
+  private static array $requestBody;
   public static string $requestResponseStatus;
   public static string $requestMethod;
 
-  public static function setRequestInfo()
+  public static function setup()
   {
     self::$requestMethod = $_SERVER["REQUEST_METHOD"] ?? "";
     self::$requestQuery = $_GET ?? "";
+    self::handleBody();
   }
 
   public static function getParams(): array
   {
     return self::$requestParams;
+  }
+
+  public static function getBody(): array
+  {
+    return self::$requestBody;
   }
 
   public static function getQuery(): array
@@ -53,5 +61,18 @@ class Request
   public static function htmlResponse()
   {
     header("Content-Type: text/html; charset=UTF-8", true);
+  }
+
+  public static function hasBody() : bool
+  {
+    return self::$hasBody;
+  }
+
+  private static function handleBody()
+  {
+    if (file_get_contents("php://input")) {
+      self::$hasBody = true;
+      self::$requestBody = json_decode(file_get_contents("php://input"), true);
+    }
   }
 }

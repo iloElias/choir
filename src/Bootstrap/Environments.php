@@ -4,46 +4,84 @@ namespace Ilias\PhpHttpRequestHandler\Bootstrap;
 
 class Environments
 {
-    public static function getEnvironments()
+    private const ENV_FILE_PATH = '.env';
+
+    public static function getEnvironments(): void
     {
-        $envFile = __DIR__ . '/../../.env';
+        $envFile = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . self::ENV_FILE_PATH;
 
         try {
-            $envContent = file_get_contents($envFile);
+            $envContent = self::loadEnvFile($envFile);
         } catch (\Throwable $th) {
             Handler::handleException($th);
+            return;
         }
 
         $envLines = explode("\n", $envContent);
+        self::processEnvLines($envLines);
+    }
 
-        foreach ($envLines as $envLine) {
-            if ($envLine === '' || $envLine === '0' || strpos($envLine, '#') === 0) {
-                continue;
-            }
-
-            [$name, $value] = explode('=', $envLine, 2);
-
-            if ($value == 'true' || $value == '(true)') {
-                $value = true;
-            }
-
-            if ($value == 'false' || $value == '(false)') {
-                $value = false;
-            }
-
-            if ($value == 'empty' || $value == '(empty)') {
-                $value = '';
-            }
-
-            if ($value == 'null' || $value == '(null)') {
-                $value = null;
-            }
-
-            $name = trim($name);
-            $value = trim(str_replace('"', '', $value));
-
-            putenv(sprintf('%s=%s', $name, $value));
-            Handler::$environment[$name] = $value;
+    private static function loadEnvFile(string $envFile): string
+    {
+        if (!file_exists($envFile) || !is_readable($envFile)) {
+            throw new \RuntimeException("Environment file not found or not readable: {$envFile}");
         }
+
+        $envContent = file_get_contents($envFile);
+
+        if ($envContent === false) {
+            throw new \RuntimeException("Failed to read the environment file: {$envFile}");
+        }
+
+        return $envContent;
+    }
+
+    private static function processEnvLines(array $envLines): void
+    {
+        foreach ($envLines as $envLine) {
+            if (self::isValidEnvLine($envLine)) {
+                [$name, $value] = self::parseEnvLine($envLine);
+                $value = self::normalizeEnvValue($value);
+
+                self::setEnvironmentVariable($name, $value);
+            }
+        }
+    }
+
+    private static function isValidEnvLine(string $envLine): bool
+    {
+        return $envLine !== '' && $envLine !== '0' && strpos($envLine, '#') !== 0;
+    }
+
+    private static function parseEnvLine(string $envLine): array
+    {
+        [$name, $value] = explode('=', $envLine, 2);
+        return [trim($name), trim(str_replace('"', '', $value))];
+    }
+
+    private static function normalizeEnvValue(string $value)
+    {
+        switch (strtolower($value)) {
+            case 'true':
+            case '(true)':
+                return true;
+            case 'false':
+            case '(false)':
+                return false;
+            case 'empty':
+            case '(empty)':
+                return '';
+            case 'null':
+            case '(null)':
+                return null;
+            default:
+                return $value;
+        }
+    }
+
+    private static function setEnvironmentVariable(string $name, $value): void
+    {
+        putenv(sprintf('%s=%s', $name, $value));
+        Handler::$environment[$name] = $value;
     }
 }

@@ -3,26 +3,58 @@
 namespace Ilias\PhpHttpRequestHandler\Model;
 
 use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+use Ilias\PhpHttpRequestHandler\Utilities\FileReader;
+use RuntimeException;
 
 class Asset
 {
-  public string $assetFolderPath;
+  private const ASSET_TRANSLATE = [
+    "" => "/",
+    "image" => "/img"
+  ];
 
-  public function __construct() {
-    $this->assetFolderPath = __DIR__ . "/../Assets";
+  private string $assetFolderPath;
+
+  public function __construct()
+  {
+    $this->assetFolderPath = rtrim($_SERVER["DOCUMENT_ROOT"], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "public";
   }
 
   public function loadAsset(string $assetType, string|int $assetIdentifier)
   {
-    $assetType = ucfirst($assetType);
-    $this->assetFolderPath .= "/{$assetType}/{$assetIdentifier}";
-    if (file_exists($this->assetFolderPath)) {
-      header('Content-Type: image/x-icon');
-      readfile($this->assetFolderPath);
-      return;
-    }
+    $assetType = self::ASSET_TRANSLATE[$assetType];
+    $assetPath = $this->assetFolderPath . DIRECTORY_SEPARATOR . $assetType . DIRECTORY_SEPARATOR . $assetIdentifier;
 
-    http_response_code(404);
-    Request::$requestResponse["message"] = "Asset {$assetIdentifier} type {$assetType} was not found";
+    try {
+      $fileReader = new FileReader($assetPath);
+      header('Content-Type: ' . $this->getMimeType($assetPath));
+      echo $fileReader->readFile();
+    } catch (RuntimeException $e) {
+      http_response_code(404);
+      Request::$requestResponse["message"] = "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage();
+    }
+  }
+
+  private function getMimeType(string $filePath): string
+  {
+    $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+    return $this->mimeTypes()[$extension] ?? 'application/octet-stream';
+  }
+
+  private function mimeTypes(): array
+  {
+    return [
+      'jpg' => 'image/jpeg',
+      'jpeg' => 'image/jpeg',
+      'png' => 'image/png',
+      'gif' => 'image/gif',
+      'ico' => 'image/x-icon',
+      'svg' => 'image/svg+xml',
+      'pdf' => 'application/pdf',
+      'txt' => 'text/plain',
+      'html' => 'text/html',
+      'css' => 'text/css',
+      'js' => 'application/javascript',
+    ];
   }
 }

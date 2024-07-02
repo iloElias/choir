@@ -18,6 +18,6 @@ class IndexController
   public static function favicon()
   {
     $assetLoader = new Asset();
-    $assetLoader->loadAsset("images", "favicon.ico");
+    $assetLoader->loadAsset("img", "favicon.ico");
   }
 }
