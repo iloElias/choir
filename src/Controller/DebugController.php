@@ -3,6 +3,7 @@
 namespace Ilias\PhpHttpRequestHandler\Controller;
 
 use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+
 class DebugController
 {
   public static function showEnvironment()
@@ -20,5 +21,21 @@ class DebugController
   {
     Request::$requestResponse["request"]["params"] = Request::$requestParams;
     Request::$requestResponse["request"]["query"] = Request::$requestQuery;
+  }
+
+  public static function getEnvironmentInstructions()
+  {
+    Request::$requestResponse["message"] = [
+      "instruction" => "There is none yet."
+    ];
+  }
+
+  public static function getEnvironmentVariable()
+  {
+    Request::$requestResponse["data"] = [
+      "requested_var" => Request::$requestParams["variable"],
+      // "variable_val" => Environments::$vars[Request::$requestParams["variable"]]
+    ];
+    Request::$requestResponse["message"] = "This functionality will not return values."; 
   }
 }

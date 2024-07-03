@@ -4,9 +4,9 @@ namespace Ilias\PhpHttpRequestHandler\Router;
 
 class RouterGroup
 {
-  private $prefix;
-  private $middleware;
-  private $routes = [];
+  private string $prefix;
+  private array $middleware;
+  private array $routes = [];
 
   public function __construct(string $prefix, array $middleware = [])
   {
@@ -54,10 +54,8 @@ class RouterGroup
     );
   }
 
-  public function group(array $attributes, callable $callback)
+  public function group(string $prefix, callable $callback, array $middleware = [])
   {
-    $prefix = $attributes['prefix'] ?? '';
-    $middleware = $attributes['middleware'] ?? [];
     $group = new RouterGroup($this->prefix . '/' . trim($prefix, '/'), array_merge($this->middleware, $middleware));
 
     call_user_func($callback, $group);

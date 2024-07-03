@@ -8,16 +8,19 @@ use Ilias\PhpHttpRequestHandler\Router\Router;
 Router::get("/", IndexController::class . "@handleApiIndex");
 Router::get("/favicon.ico", IndexController::class . "@favicon");
 
-Router::get("/asset", AssetController::class . "@instruction");
-Router::group(['prefix' => '/asset/{type}'], function ($router) {
-  $router->get("/name/{name}", AssetController::class . "@getAssetByName");
-  $router->get("/id/{id}", AssetController::class . "@getAssetById");
-  
-  $router->group(['prefix' => '/details/{test}'], function ($router) {
-    $router->get("/extra/{extra}", DebugController::class . "@showEnvironment");
+Router::group("/asset", function ($router) {
+  $router->get("/", AssetController::class . "@instruction");
+  $router->group("/{type}", function ($router) {
+    $router->get("/name/{name}", AssetController::class . "@getAssetByName");
+    $router->get("/id/{id}", AssetController::class . "@getAssetById");
   });
 });
 
-Router::get("/debug/{alpha}/{beta}/{delta}", DebugController::class . "@showNestedParams");
-Router::get("/debug", DebugController::class . "@showEnvironment");
-
+Router::group("/debug", function ($router) {
+  $router->get("/", DebugController::class . "@showEnvironment");
+  $router->group("/env", function ($router) {
+    $router->get("/", DebugController::class . "@getEnvironmentInstructions");
+    $router->get("/{variable}", DebugController::class . "@getEnvironmentVariable");
+  });
+  $router->get("/{first}/{second}/{third}", DebugController::class . "@showNestedParams");
+});

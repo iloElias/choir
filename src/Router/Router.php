@@ -8,7 +8,6 @@ use Ilias\PhpHttpRequestHandler\Middleware\Middleware;
 class Router
 {
   private static $routes = [];
-  private static $routeGroups = [];
   private static $baseMiddleware = [];
 
   public static function setup()
@@ -20,6 +19,9 @@ class Router
 
   public static function addRoute(Route $route)
   {
+    if (str_ends_with($route->uri, "/") && $route->uri !== "/") {
+      $route->uri = substr($route->uri, 0, -1);
+    }
     self::$routes[] = $route;
   }
 
@@ -51,14 +53,28 @@ class Router
     );
   }
 
-  public static function group(array $attributes, callable $callback)
+  public static function getRoutesAvailable()
   {
-    $prefix = $attributes['prefix'] ?? '';
-    $middleware = $attributes['middleware'] ?? [];
+    $routes = [];
+    foreach (self::$routes as $route) {
+      $routes[] = $route->uri;
+    }
+
+    return $routes;
+  }
+
+  public static function group(string $prefix, callable $callback, array $middleware = [])
+  {
     $group = new RouterGroup($prefix, array_merge(self::$baseMiddleware, $middleware));
-    self::$routeGroups[] = $group;
 
     call_user_func($callback, $group);
+
+    foreach ($group->getRoutes() as $route) {
+      if (str_ends_with($route->uri, "/") && $route->uri !== "/") {
+        $route->uri = substr($route->uri, 0, -1);
+      }
+      self::$routes[] = $route;
+    }
   }
 
   public static function dispatch($method, $uri)
@@ -70,17 +86,9 @@ class Router
       }
     }
 
-    foreach (self::$routeGroups as $group) {
-      foreach ($group->getRoutes() as $route) {
-        if (self::matchRoute($route, $method, $uri)) {
-          self::handleRoute($route);
-          return;
-        }
-      }
-    }
-
     http_response_code(404);
     Request::appendResponse("message", "Route not found");
+    Request::appendResponse("available_routes", self::getRoutesAvailable());
   }
 
   private static function matchRoute($route, $method, $uri)
@@ -89,13 +97,14 @@ class Router
       return false;
     }
 
-    $pattern = preg_replace('/\{([\w]+)\}/', '([\w-]+)', $route->uri);
-    $pattern = str_replace('/', '\/', $pattern);
+    $regex = '/\{([\w]+)\}/';
+    $pattern = preg_replace($regex, '([\w-]+)', $route->uri);
+    $pattern = str_replace('/', '\/', preg_replace($regex, '([\w-]+)', $route->uri));
     $pattern = '/^' . $pattern . '$/';
 
     if (preg_match($pattern, $uri, $matches)) {
       $params = [];
-      preg_match_all('/\{([\w]+)\}/', $route->uri, $paramNames);
+      preg_match_all($regex, $route->uri, $paramNames);
       foreach ($paramNames[1] as $index => $name) {
         $params[$name] = $matches[$index + 1];
       }

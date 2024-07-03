@@ -7,12 +7,12 @@ use Ilias\PhpHttpRequestHandler\Router\Routes;
 
 class Handler
 {
-  public static $environment = [];
 
   public static function handle(array $params = [])
   {
     /* Request handling example */
     try {
+      Environments::getEnvironments();
       Routes::setup();
       Request::jsonResponse();
       Request::setup();
