@@ -16,20 +16,16 @@ class AssetController
     ];
   }
 
-  public static function getImageByName()
+  public static function getAssetByName()
   {
-    Request::$requestResponse = [
-      "params" => Request::$requestParams
-    ];
+    DebugController::showEnvironment();
 
-    // $assetType = Request::getParams()[""];
-    // $assetIdentifier = Request::getParams()[""];
-
-    // $assetLoader = new Asset();
-    // $assetLoader->loadAsset($assetType, $assetIdentifier);
+    // Request::$requestResponse = [
+    //   "params" => Request::$requestParams
+    // ];
   }
 
-  public static function getImageById()
+  public static function getAssetById()
   {
     Request::$requestResponse = [
       "params" => Request::$requestParams

@@ -15,4 +15,10 @@ class DebugController
     Request::$requestResponse["request"]["query"] = Request::$requestQuery;
     Request::$requestResponse["data"]["request"] = $GLOBALS;
   }
+
+  public static function showNestedParams()
+  {
+    Request::$requestResponse["request"]["params"] = Request::$requestParams;
+    Request::$requestResponse["request"]["query"] = Request::$requestQuery;
+  }
 }

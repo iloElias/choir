@@ -71,7 +71,7 @@ class Router
     }
 
     foreach (self::$routeGroups as $group) {
-      foreach ($group->routes as $route) {
+      foreach ($group->getRoutes() as $route) {
         if (self::matchRoute($route, $method, $uri)) {
           self::handleRoute($route);
           return;

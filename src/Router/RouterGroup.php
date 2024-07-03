@@ -4,40 +4,66 @@ namespace Ilias\PhpHttpRequestHandler\Router;
 
 class RouterGroup
 {
-  public $prefix;
-  public $middleware;
-  public $routes = [];
+  private $prefix;
+  private $middleware;
+  private $routes = [];
 
-  public function __construct($prefix = '', $middleware = [])
+  public function __construct(string $prefix, array $middleware = [])
   {
-    $this->prefix = $prefix;
+    $this->prefix = rtrim($prefix, '/');
     $this->middleware = $middleware;
   }
 
-  public function addRoute($method, $uri, $action, $middleware = [])
+  public function getRoutes()
   {
-    $uri = $this->prefix . $uri;
-    $middleware = array_merge($this->middleware, $middleware);
-    $this->routes[] = new Route($method, $uri, $action, $middleware);
+    return $this->routes;
   }
 
-  public function get($uri, $action, $middleware = [])
+  public function addRoute(Route $route)
   {
-    $this->addRoute('GET', $uri, $action, $middleware);
+    $route->uri = $this->prefix . '/' . ltrim($route->uri, '/');
+    $route->middleware = array_merge($this->middleware, $route->middleware);
+    $this->routes[] = $route;
   }
 
-  public function post($uri, $action, $middleware = [])
+  public function get(string $uri, string $action, array $middleware = [])
   {
-    $this->addRoute('POST', $uri, $action, $middleware);
+    $this->addRoute(
+      new Route('GET', $uri, $action, $middleware)
+    );
   }
 
-  public function put($uri, $action, $middleware = [])
+  public function post(string $uri, string $action, array $middleware = [])
   {
-    $this->addRoute('PUT', $uri, $action, $middleware);
+    $this->addRoute(
+      new Route('POST', $uri, $action, $middleware)
+    );
   }
 
-  public function delete($uri, $action, $middleware = [])
+  public function put(string $uri, string $action, array $middleware = [])
   {
-    $this->addRoute('DELETE', $uri, $action, $middleware);
+    $this->addRoute(
+      new Route('PUT', $uri, $action, $middleware)
+    );
+  }
+
+  public function delete(string $uri, string $action, array $middleware = [])
+  {
+    $this->addRoute(
+      new Route('DELETE', $uri, $action, $middleware)
+    );
+  }
+
+  public function group(array $attributes, callable $callback)
+  {
+    $prefix = $attributes['prefix'] ?? '';
+    $middleware = $attributes['middleware'] ?? [];
+    $group = new RouterGroup($this->prefix . '/' . trim($prefix, '/'), array_merge($this->middleware, $middleware));
+
+    call_user_func($callback, $group);
+
+    foreach ($group->getRoutes() as $route) {
+      $this->routes[] = $route;
+    }
   }
 }

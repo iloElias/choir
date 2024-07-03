@@ -6,7 +6,7 @@ This GitHub repository provides a comprehensive Nginx server setup optimized for
 # Dependencies
 This template has some dependencies that need to be installed on your current workspace:
 - **Docker**: Mainly used for local testing
-- **PHP 8.1**: The current used programming language and it minimum version
+- **PHP 8.1**: The current used programming language and it's minimum version
 - **Composer**: PHP package manager
 
 # 1st Step: Domain name
