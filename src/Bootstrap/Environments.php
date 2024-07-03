@@ -22,13 +22,11 @@ class Environments
     self::processEnvLines($envLines);
   }
 
-  private static function loadEnvFile(string $envFile): string
+  private static function loadEnvFile(string $envFile)
   {
-    if (!file_exists($envFile)) {
-      throw new \RuntimeException("Environment file not found or not readable: {$envFile}");
+    if (file_exists($envFile)) {
+      return file_get_contents($envFile) ?? null;
     }
-
-    return file_get_contents($envFile) ?? null;
   }
 
   private static function processEnvLines(array $envLines): void
