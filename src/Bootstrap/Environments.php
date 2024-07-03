@@ -24,17 +24,11 @@ class Environments
 
   private static function loadEnvFile(string $envFile): string
   {
-    if (!file_exists($envFile) || !is_readable($envFile)) {
+    if (!file_exists($envFile)) {
       throw new \RuntimeException("Environment file not found or not readable: {$envFile}");
     }
 
-    $envContent = file_get_contents($envFile);
-
-    if ($envContent === false) {
-      throw new \RuntimeException("Failed to read the environment file: {$envFile}");
-    }
-
-    return $envContent;
+    return file_get_contents($envFile) ?? null;
   }
 
   private static function processEnvLines(array $envLines): void
