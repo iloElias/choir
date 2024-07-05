@@ -31,7 +31,7 @@ class Asset
       echo $fileReader->readFile();
     } catch (RuntimeException $e) {
       http_response_code(404);
-      Request::$requestResponse["message"] = "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage();
+      Request::$response["message"] = "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage();
     }
   }
 

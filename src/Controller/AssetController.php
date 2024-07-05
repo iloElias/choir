@@ -8,7 +8,7 @@ class AssetController
 {
   public static function instruction()
   {
-    Request::$requestResponse = [
+    Request::$response = [
       "instructions" => [
         "introduction" => "Instructions on how do get assets",
         "step-by-step" => "There is a placeholder :p"
@@ -20,15 +20,15 @@ class AssetController
   {
     DebugController::showEnvironment();
 
-    // Request::$requestResponse = [
-    //   "params" => Request::$requestParams
+    // Request::$response = [
+    //   "params" => Request::$params
     // ];
   }
 
   public static function getAssetById()
   {
-    Request::$requestResponse = [
-      "params" => Request::$requestParams
+    Request::$response = [
+      "params" => Request::$params
     ];
   }
 }

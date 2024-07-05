@@ -12,7 +12,7 @@ class IndexController
   public static function handleApiIndex()
   {
     $greedModel = new Greed();
-    Request::$requestResponse["message"] = $greedModel->greed();
+    Request::$response["message"] = $greedModel->greed();
   }
 
   public static function favicon()

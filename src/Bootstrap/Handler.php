@@ -28,8 +28,8 @@ class Handler
 
   public static function handleException(\Throwable $th)
   {
-    Request::$requestResponse["message"] = $th->getMessage();
-    Request::$requestResponse["exception"] = get_object_vars($th);
+    Request::$response["message"] = $th->getMessage();
+    Request::$response["exception"] = get_object_vars($th);
 
     Request::answer();
   }

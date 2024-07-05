@@ -25,3 +25,5 @@ Router::group("/debug", function ($router) {
   $router->get("/dir", DebugController::class . "@mapProjectFiles");
   $router->get("/{first}/{second}/{third}", DebugController::class . "@showNestedParams");
 });
+
+Router::post("/debug/body", DebugController::class . "@showBody");

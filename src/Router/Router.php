@@ -108,7 +108,7 @@ class Router
       foreach ($paramNames[1] as $index => $name) {
         $params[$name] = $matches[$index + 1];
       }
-      Request::$requestParams = $params;
+      Request::$params = $params;
       return true;
     }
 

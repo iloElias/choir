@@ -8,7 +8,7 @@ class Greed
 {
   public function greed()
   {
-    if (isset(Request::$requestQuery["uwu"])) {
+    if (isset(Request::$query["uwu"])) {
       return "Good programming senpai!";
     }
     return "Good programming!";
