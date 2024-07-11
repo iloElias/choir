@@ -3,7 +3,7 @@
 use Ilias\PhpHttpRequestHandler\Controller\AssetController;
 use Ilias\PhpHttpRequestHandler\Controller\DebugController;
 use Ilias\PhpHttpRequestHandler\Controller\IndexController;
-use Ilias\PhpHttpRequestHandler\Router\Router;
+use Ilias\Rhetoric\Router\Router;
 
 Router::get("/", IndexController::class . "@handleApiIndex");
 Router::get("/favicon.ico", IndexController::class . "@favicon");

@@ -1,17 +1,21 @@
 {
-    "name": "ilias/php_http_request_handler",
-    "description": "A PHP http requests handler template",
-    "type": "false",
-    "autoload": {
-        "psr-4": {
-            "Ilias\\PhpHttpRequestHandler\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Murilo Elias",
-            "email": "murilo7456@gmail.com"
-        }
-    ],
-    "require": {}
+  "name": "ilias/php_http_request_handler",
+  "description": "A PHP http requests handler template",
+  "type": "false",
+  "autoload": {
+    "psr-4": {
+      "Ilias\\PhpHttpRequestHandler\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Murilo Elias",
+      "email": "murilo7456@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.0.0",
+    "ilias/rhetoric": "dev-master"
+  },
+  "minimum-stability": "dev"
 }
