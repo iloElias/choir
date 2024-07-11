@@ -2,7 +2,7 @@
 
 namespace Ilias\PhpHttpRequestHandler\Model;
 
-use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+use Ilias\Opherator\Request\Response;
 use Ilias\PhpHttpRequestHandler\Utilities\FileReader;
 use RuntimeException;
 
@@ -31,7 +31,7 @@ class Asset
       echo $fileReader->readFile();
     } catch (RuntimeException $e) {
       http_response_code(404);
-      Request::$response["message"] = "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage();
+      Response::appendResponse("message", "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage());
     }
   }
 

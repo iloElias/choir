@@ -14,7 +14,7 @@ class Environments
     try {
       $envContent = self::loadEnvFile($envFile);
     } catch (\Throwable $th) {
-      Handler::handleException($th);
+      Core::handleException($th);
       return;
     }
 

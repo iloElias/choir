@@ -2,18 +2,19 @@
 
 namespace Ilias\PhpHttpRequestHandler\Controller;
 
-use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+use Ilias\Opherator\Request\Response;
+use Ilias\Rhetoric\Router\Router;
 
 class AssetController
 {
   public static function instruction()
   {
-    Request::$response = [
+    Response::setResponse([
       "instructions" => [
         "introduction" => "Instructions on how do get assets",
         "step-by-step" => "There is a placeholder :p"
       ],
-    ];
+    ]);
   }
 
   public static function getAssetByName()
@@ -27,8 +28,8 @@ class AssetController
 
   public static function getAssetById()
   {
-    Request::$response = [
-      "params" => Request::$params
-    ];
+    Response::setResponse([
+      "params" => Router::getParams()
+    ]);
   }
 }

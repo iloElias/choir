@@ -2,52 +2,56 @@
 
 namespace Ilias\PhpHttpRequestHandler\Controller;
 
-use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+use Ilias\Opherator\Request\Request;
+use Ilias\Opherator\Request\Response;
 use Ilias\PhpHttpRequestHandler\Utilities\DirectoryReader;
-use Ilias\PhpHttpRequestHandler\Utilities\FileReader;
+use Ilias\Rhetoric\Router\Router;
 
 class DebugController
 {
   public static function showEnvironment()
   {
-    Request::$response["message"] = ["ping" => "pong"];
-    Request::$response["data"] = [];
-    Request::$response["request"]["request_method"] = Request::$method;
-    Request::$response["request"]["params"] = Request::$params;
-    Request::hasBody() && Request::$response["request"]["body"] = Request::getBody();
-    Request::$response["request"]["query"] = Request::$query;
-    Request::$response["data"]["request"] = $GLOBALS;
+    Response::appendResponse("message", ["ping" => "pong"]);
+    Response::appendResponse("data", ["request" => $GLOBALS]);
+    Response::appendResponse("request", [
+      "request_method" => Request::getMethod(),
+      "params" => Router::getParams(),
+      Request::hasBody() && "body" => Request::getBody(),
+      "query" => Request::getQuery(),
+    ]);
   }
 
   public static function showNestedParams()
   {
-    Request::$response["request"]["params"] = Request::$params;
-    Request::$response["request"]["query"] = Request::$query;
+    Response::appendResponse("request", [
+      "params" => Router::getParams(),
+      "query" => Request::getQuery(),
+    ]);
   }
 
   public static function getEnvironmentInstructions()
   {
-    Request::$response["message"] = [
+    Response::appendResponse("message", [
       "instruction" => "There is none yet."
-    ];
+    ]);
   }
 
   public static function getEnvironmentVariable()
   {
-    Request::$response["data"] = [
-      "requested_var" => Request::$params["variable"],
+    Response::appendResponse("data", [
+      "requested_var" => Router::getParams()["variable"],
       // "variable_val" => Environments::$vars[Request::$params["variable"]]
-    ];
-    Request::$response["message"] = "This functionality will not return values.";
+    ]);
+    Response::appendResponse("message", "This functionality will not return values.");
   }
 
   public static function mapProjectFiles()
   {
     $directoryReader = new DirectoryReader($_SERVER['DOCUMENT_ROOT']);
-    Request::$response["data"] = $directoryReader->readDirectory();
+    Response::appendResponse("data", $directoryReader->readDirectory());
   }
 
   public static function showBody() {
-    Request::$response["data"] = Request::getBody();
+    Response::appendResponse("data", Request::getBody());
   }
 }

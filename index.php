@@ -2,8 +2,8 @@
 
 error_reporting(E_ERROR | E_PARSE);
 
-use Ilias\PhpHttpRequestHandler\Bootstrap\Handler;
+use Ilias\PhpHttpRequestHandler\Bootstrap\Core;
 
 require_once("./vendor/autoload.php");
 
-Handler::handle();
+Core::handle();

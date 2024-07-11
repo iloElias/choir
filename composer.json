@@ -15,7 +15,8 @@
   ],
   "require": {
     "php": ">=8.0.0",
-    "ilias/rhetoric": "dev-master"
+    "ilias/rhetoric": "dev-master",
+    "ilias/opherator": "dev-master"
   },
   "minimum-stability": "dev"
 }

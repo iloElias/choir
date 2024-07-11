@@ -2,13 +2,13 @@
 
 namespace Ilias\PhpHttpRequestHandler\Model;
 
-use Ilias\PhpHttpRequestHandler\Bootstrap\Request;
+use Ilias\Opherator\Request\Request;
 
 class Greed
 {
   public function greed()
   {
-    if (isset(Request::$query["uwu"])) {
+    if (isset(Request::getQuery()["uwu"])) {
       return "Good programming senpai!";
     }
     return "Good programming!";
