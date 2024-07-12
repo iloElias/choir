@@ -1,6 +1,6 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Exceptions;
+namespace Ilias\Choir\Exceptions;
 
 use Exception;
 

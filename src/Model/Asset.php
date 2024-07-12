@@ -1,9 +1,9 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Model;
+namespace Ilias\Choir\Model;
 
 use Ilias\Opherator\Request\Response;
-use Ilias\PhpHttpRequestHandler\Utilities\FileReader;
+use Ilias\Choir\Utilities\FileReader;
 use RuntimeException;
 
 class Asset

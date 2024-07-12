@@ -1,6 +1,6 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Model;
+namespace Ilias\Choir\Model;
 
 use Ilias\Opherator\Request\Request;
 

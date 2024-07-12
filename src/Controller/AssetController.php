@@ -1,6 +1,6 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Controller;
+namespace Ilias\Choir\Controller;
 
 use Ilias\Opherator\Request\Response;
 use Ilias\Rhetoric\Router\Router;

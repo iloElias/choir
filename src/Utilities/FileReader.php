@@ -1,6 +1,6 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Utilities;
+namespace Ilias\Choir\Utilities;
 
 class FileReader
 {

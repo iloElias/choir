@@ -1,8 +1,8 @@
 <?php
 
-use Ilias\PhpHttpRequestHandler\Controller\AssetController;
-use Ilias\PhpHttpRequestHandler\Controller\DebugController;
-use Ilias\PhpHttpRequestHandler\Controller\IndexController;
+use Ilias\Choir\Controller\AssetController;
+use Ilias\Choir\Controller\DebugController;
+use Ilias\Choir\Controller\IndexController;
 use Ilias\Rhetoric\Router\Router;
 
 Router::get("/", IndexController::class . "@handleApiIndex");

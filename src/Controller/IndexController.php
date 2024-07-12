@@ -1,10 +1,10 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Controller;
+namespace Ilias\Choir\Controller;
 
 use Ilias\Opherator\Request\Response;
-use Ilias\PhpHttpRequestHandler\Model\Asset;
-use Ilias\PhpHttpRequestHandler\Model\Greed;
+use Ilias\Choir\Model\Asset;
+use Ilias\Choir\Model\Greed;
 
 class IndexController
 {

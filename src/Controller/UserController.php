@@ -1,6 +1,6 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Controller;
+namespace Ilias\Choir\Controller;
 
 class UserController
 {

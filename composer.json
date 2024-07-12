@@ -1,10 +1,10 @@
 {
-  "name": "ilias/php_http_request_handler",
+  "name": "ilias/choir",
   "description": "A PHP http requests handler template",
-  "type": "false",
+  "type": "project",
   "autoload": {
     "psr-4": {
-      "Ilias\\PhpHttpRequestHandler\\": "src/"
+      "Ilias\\Choir\\": "src/"
     }
   },
   "authors": [

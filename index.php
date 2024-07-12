@@ -2,7 +2,7 @@
 
 error_reporting(E_ERROR | E_PARSE);
 
-use Ilias\PhpHttpRequestHandler\Bootstrap\Core;
+use Ilias\Choir\Bootstrap\Core;
 
 require_once("./vendor/autoload.php");
 

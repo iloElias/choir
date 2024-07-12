@@ -1,6 +1,6 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Bootstrap;
+namespace Ilias\Choir\Bootstrap;
 
 use Ilias\Opherator\Request\Request;
 use Ilias\Opherator\Request\Response;

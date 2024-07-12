@@ -1,10 +1,10 @@
 <?php
 
-namespace Ilias\PhpHttpRequestHandler\Controller;
+namespace Ilias\Choir\Controller;
 
 use Ilias\Opherator\Request\Request;
 use Ilias\Opherator\Request\Response;
-use Ilias\PhpHttpRequestHandler\Utilities\DirectoryReader;
+use Ilias\Choir\Utilities\DirectoryReader;
 use Ilias\Rhetoric\Router\Router;
 
 class DebugController
