@@ -23,6 +23,7 @@ Router::group("/debug", function ($router) {
     $router->get("/{variable}", DebugController::class . "@getEnvironmentVariable");
   });
   $router->get("/dir", DebugController::class . "@mapProjectFiles");
+  $router->get("/file", DebugController::class . "@getFileContent");
   $router->get("/{first}/{second}/{third}", DebugController::class . "@showNestedParams");
 });
 

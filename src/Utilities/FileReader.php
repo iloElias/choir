@@ -10,8 +10,11 @@ class FileReader
   {
     $this->filePath = $filePath;
 
-    if (!file_exists($this->filePath) || !is_readable($this->filePath)) {
-      throw new \RuntimeException("File not found or not readable: {$this->filePath}");
+    if (!file_exists($this->filePath)) {
+      throw new \RuntimeException("File {$this->filePath} as not found");
+    }
+    if (!is_readable($this->filePath)) {
+      throw new \RuntimeException("File {$this->filePath} could not be read");
     }
   }
 
