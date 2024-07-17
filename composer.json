@@ -7,6 +7,11 @@
       "Ilias\\Choir\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "authors": [
     {
       "name": "Murilo Elias",
@@ -16,7 +21,9 @@
   "require": {
     "php": ">=8.0",
     "ilias/rhetoric": "dev-master",
-    "ilias/opherator": "dev-master"
+    "ilias/opherator": "dev-master",
+    "ilias/maestro": "dev-master",
+    "ilias/dotenv": "dev-master"
   },
   "minimum-stability": "dev"
 }

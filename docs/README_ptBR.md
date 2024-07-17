@@ -11,7 +11,7 @@ Este modelo pronto tem algumas dependências que precisam ser instaladas no seu 
 Em sua maquina de trabalho, adicione a seguinte linha de instrução no arquivo `/etc/hosts`:
 
 ```
-127.0.0.1   your.dev.api.com
+127.0.0.1   choir.api.com
 ```
 
 # 2º Passo: Preparando o ambiente
@@ -37,7 +37,7 @@ Construir a sua imagem Docker personalizada executando: `./docker/build.sh`
 ```
 
 # 4º Passo: Cheque seu navegador
-Abra http://your.dev.api.com/, você deve ver a seguinte entrada: `ping: "pong"`.
+Abra http://choir.api.com/, você deve ver a seguinte entrada: `ping: "pong"`.
 
 # Studying how it works
 Os scripts mais importante são:

@@ -2,6 +2,7 @@
 
 namespace Ilias\Choir\Bootstrap;
 
+use Ilias\Dotenv\Environment;
 use Ilias\Opherator\Request\Request;
 use Ilias\Opherator\Request\Response;
 use Ilias\Rhetoric\Router\Router;
@@ -14,7 +15,7 @@ class Core
   {
     /* Request handling example */
     try {
-      Environments::getEnvironments();
+      Environment::setup();
       Routes::setup();
       Response::jsonResponse();
       Request::setup();

@@ -2,9 +2,11 @@
 
 namespace Ilias\Choir\Controller;
 
+use Ilias\Choir\Bootstrap\Core;
 use Ilias\Opherator\Request\Request;
 use Ilias\Opherator\Request\Response;
 use Ilias\Choir\Utilities\DirectoryReader;
+use Ilias\Choir\Utilities\FileReader;
 use Ilias\Rhetoric\Router\Router;
 
 class DebugController
@@ -51,7 +53,15 @@ class DebugController
     Response::appendResponse("data", $directoryReader->readDirectory());
   }
 
-  public static function showBody() {
+  public static function getFileContent()
+  {
+    $filePath = Request::getQuery()["path"];
+    $directoryReader = new FileReader($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $filePath);
+    Response::appendResponse("data", $directoryReader->readFile());
+  }
+
+  public static function showBody()
+  {
     Response::appendResponse("data", Request::getBody());
   }
 }

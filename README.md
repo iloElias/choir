@@ -12,7 +12,7 @@ This template has some dependencies that need to be installed on your current wo
 # 1st Step: Domain name
 In your local host machine add the following lines to your `/etc/hosts` file in order to find the application.
 ```
-127.0.0.1   your.dev.api.com
+127.0.0.1   choir.api.com
 ```
 
 # 2nd Step: Preparing the environment
@@ -39,7 +39,7 @@ Build your custom Docker Image running `./docker/build.sh`
 ```
 
 # 4th Step: Check your browser
-Open http://your.dev.api.com/ and check the headers on your devtools, and you should see this entry `ping: "pong"`.
+Open http://choir.api.com/ and check the headers on your devtools, and you should see this entry `ping: "pong"`.
 
 # Studying how it works
 The most important scripts are:
