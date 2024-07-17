@@ -19,7 +19,6 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
     "ilias/rhetoric": "dev-master",
     "ilias/opherator": "dev-master",
     "ilias/maestro": "dev-master",
