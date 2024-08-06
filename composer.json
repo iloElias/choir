@@ -19,10 +19,10 @@
     }
   ],
   "require": {
-    "ilias/rhetoric": "dev-master",
-    "ilias/opherator": "dev-master",
-    "ilias/maestro": "dev-master",
-    "ilias/dotenv": "dev-master"
+    "ilias/rhetoric": "^1.0",
+    "ilias/opherator": "^1.0",
+    "ilias/maestro": "^1.0",
+    "ilias/dotenv": "^1.0"
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }
