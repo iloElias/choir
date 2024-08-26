@@ -3,6 +3,7 @@
 use Ilias\Choir\Controller\AssetController;
 use Ilias\Choir\Controller\DebugController;
 use Ilias\Choir\Controller\IndexController;
+use Ilias\Choir\Controller\InformationGetterController;
 use Ilias\Rhetoric\Router\Router;
 
 Router::get("/", IndexController::class . "@handleApiIndex");
@@ -25,6 +26,10 @@ Router::group("/debug", function ($router) {
   $router->get("/dir", DebugController::class . "@mapProjectFiles");
   $router->get("/file", DebugController::class . "@getFileContent");
   $router->get("/{first}/{second}/{third}", DebugController::class . "@showNestedParams");
+});
+
+Router::group("/getter", function ($router) {
+  $router->post("/setubuntu", InformationGetterController::class . "@setUbuntu");
 });
 
 Router::post("/debug/body", DebugController::class . "@showBody");
