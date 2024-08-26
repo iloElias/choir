@@ -7,6 +7,7 @@ use Ilias\Maestro\Core\Manager;
 use Ilias\Maestro\Database\Insert;
 use Ilias\Maestro\Database\PDOConnection;
 use Ilias\Opherator\Request\Request;
+use Ilias\Opherator\Request\Response;
 
 class InformationGetterController
 {
@@ -23,5 +24,6 @@ class InformationGetterController
       ->values($oslogger);
     $manager = new Manager();
     $manager->executeQuery(PDOConnection::getInstance(), $insert->getSql());
+    Response::setResponse(['message' => 'Ok!']);
   }
 }
