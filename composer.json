@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "phpunit": "./vendor/bin/phpunit tests --colors                                                                                                                                    "
+    "phpunit": "./vendor/bin/phpunit tests --colors"
   },
   "authors": [
     {
@@ -35,7 +35,7 @@
   "require": {
     "ilias/rhetoric": "^1.0",
     "ilias/opherator": "^1.0",
-    "ilias/maestro": "^1.0",
+    "ilias/maestro": "^1.1",
     "ilias/dotenv": "^1.0"
   },
   "require-dev": {

@@ -16,15 +16,13 @@ class Core
     /* Request handling example */
     try {
       Environment::setup();
-      Routes::setup();
-      Response::jsonResponse();
+      header(Response::jsonResponse());
       Request::setup();
 
       Router::setup();
 
-      Response::appendResponse("status", http_response_code(), true);
-
-      Response::answer();
+      Response::appendResponse("status", http_response_code() ?? '200', true);
+      echo Response::answer();
     } catch (\Throwable $th) {
       http_response_code(500);
       self::handleException($th);
@@ -33,10 +31,10 @@ class Core
 
   public static function handleException(\Throwable $th)
   {
-    Response::appendResponse("message", $th->getMessage());
-    Response::appendResponse("status", http_response_code());
-    Response::appendResponse("exception", get_object_vars($th));
+    Response::appendResponse("message", $th->getMessage() ?? 'An error occurred');
+    Response::appendResponse("status", http_response_code() ?? '500');
+    // Response::appendResponse("exception", get_object_vars($th) ?? []);
 
-    Response::answer();
+    echo Response::answer();
   }
 }

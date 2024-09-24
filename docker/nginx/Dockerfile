@@ -2,6 +2,7 @@ FROM php:8.1-fpm-alpine
 
 EXPOSE 3000
 EXPOSE 8040
+EXPOSE 9003
 
 USER root
 
