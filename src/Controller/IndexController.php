@@ -2,9 +2,9 @@
 
 namespace Ilias\Choir\Controller;
 
-use Ilias\Opherator\Request\Response;
 use Ilias\Choir\Model\Asset;
 use Ilias\Choir\Model\Greed;
+use Ilias\Opherator\Response;
 
 class IndexController
 {

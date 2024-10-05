@@ -1,6 +1,6 @@
 <?php
+
 use Ilias\Maestro\Core\Manager;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 
 require_once 'vendor/autoload.php';
 

@@ -28,8 +28,4 @@ Router::group("/debug", function ($router) {
   $router->get("/{first}/{second}/{third}", DebugController::class . "@showNestedParams");
 });
 
-Router::group("/getter", function ($router) {
-  $router->post("/setubuntu", InformationGetterController::class . "@setUbuntu");
-});
-
 Router::post("/debug/body", DebugController::class . "@showBody");

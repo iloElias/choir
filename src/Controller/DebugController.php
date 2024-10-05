@@ -3,24 +3,29 @@
 namespace Ilias\Choir\Controller;
 
 use Ilias\Choir\Bootstrap\Core;
-use Ilias\Opherator\Request\Request;
-use Ilias\Opherator\Request\Response;
+use Ilias\Opherator\Request;
+use Ilias\Opherator\Request\StatusCode;
+use Ilias\Opherator\Response;
 use Ilias\Choir\Utilities\DirectoryReader;
 use Ilias\Choir\Utilities\FileReader;
+use Ilias\Opherator\JsonResponse;
 use Ilias\Rhetoric\Router\Router;
 
 class DebugController
 {
   public static function showEnvironment()
   {
-    Response::appendResponse("message", ["ping" => "pong"]);
-    Response::appendResponse("data", ["request" => $GLOBALS]);
-    Response::appendResponse("request", [
-      "request_method" => Request::getMethod(),
-      "params" => Router::getParams(),
-      Request::hasBody() && "body" => Request::getBody(),
-      "query" => Request::getQuery(),
+    $jsonResponse = new JsonResponse(new StatusCode(StatusCode::OK), [
+      'message' => 'Those are the environment variables',
+      'data' => ["request" => $GLOBALS],
+      "request" => [
+        "request_method" => Request::getMethod(),
+        "params" => Router::getParams(),
+        Request::hasBody() && "body" => Request::getBody(),
+        "query" => Request::getQuery(),
+      ]
     ]);
+    Response::setResponse((array)$jsonResponse);
   }
 
   public static function showNestedParams()
