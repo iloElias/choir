@@ -2,7 +2,7 @@
   "name": "ilias/choir",
   "description": "A PHP HTTP requests handler template",
   "type": "project",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "keywords": [
     "PHP",
