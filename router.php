@@ -3,7 +3,6 @@
 use Ilias\Choir\Controller\AssetController;
 use Ilias\Choir\Controller\DebugController;
 use Ilias\Choir\Controller\IndexController;
-use Ilias\Choir\Controller\InformationGetterController;
 use Ilias\Rhetoric\Router\Router;
 
 Router::get("/", IndexController::class . "@handleApiIndex");

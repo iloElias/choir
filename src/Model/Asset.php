@@ -2,6 +2,7 @@
 
 namespace Ilias\Choir\Model;
 
+use Ilias\Opherator\Request\StatusCode;
 use Ilias\Opherator\Response;
 use Ilias\Choir\Utilities\FileReader;
 use RuntimeException;
@@ -30,8 +31,10 @@ class Asset
       header('Content-Type: ' . $this->getMimeType($assetPath));
       echo $fileReader->readFile();
     } catch (RuntimeException $e) {
-      http_response_code(404);
-      Response::appendResponse("message", "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage());
+      $response = new Response(new StatusCode(StatusCode::NOT_FOUND), [
+        "message" => "Asset {$assetIdentifier} type {$assetType} was not found: " . $e->getMessage()
+      ]);
+      return $response;
     }
   }
 

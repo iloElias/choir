@@ -2,7 +2,6 @@
 
 namespace Ilias\Choir\Controller;
 
-use Ilias\Choir\Bootstrap\Core;
 use Ilias\Opherator\Request;
 use Ilias\Opherator\Request\StatusCode;
 use Ilias\Opherator\Response;
@@ -25,48 +24,63 @@ class DebugController
         "query" => Request::getQuery(),
       ]
     ]);
-    Response::setResponse((array)$jsonResponse);
+    Response::setResponse((array) $jsonResponse);
   }
 
   public static function showNestedParams()
   {
-    Response::appendResponse("request", [
-      "params" => Router::getParams(),
-      "query" => Request::getQuery(),
+    $response = new JsonResponse(new StatusCode(StatusCode::OK), [
+      "request" => [
+        "params" => Router::getParams(),
+        "query" => Request::getQuery(),
+      ]
     ]);
+    return $response;
   }
 
   public static function getEnvironmentInstructions()
   {
-    Response::appendResponse("message", [
-      "instruction" => "There is none yet."
+    $response = new JsonResponse(new StatusCode(StatusCode::OK), [
+      "message" => [
+        "instruction" => "There is none yet."
+      ]
     ]);
+    return $response;
   }
 
   public static function getEnvironmentVariable()
   {
-    Response::appendResponse("data", [
-      "requested_var" => Router::getParams()["variable"],
+    $response = new JsonResponse(new StatusCode(StatusCode::OK), [
+      "message" => "This functionality will not return values."
       // "variable_val" => Environments::$vars[Request::$params["variable"]]
     ]);
-    Response::appendResponse("message", "This functionality will not return values.");
+    return $response;
   }
 
   public static function mapProjectFiles()
   {
     $directoryReader = new DirectoryReader($_SERVER['DOCUMENT_ROOT']);
-    Response::appendResponse("data", $directoryReader->readDirectory());
+    $response = new JsonResponse(new StatusCode(StatusCode::OK), [
+      "data" => $directoryReader->readDirectory()
+    ]);
+    return $response;
   }
 
   public static function getFileContent()
   {
     $filePath = Request::getQuery()["path"];
     $directoryReader = new FileReader($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $filePath);
-    Response::appendResponse("data", $directoryReader->readFile());
+    $response = new JsonResponse(new StatusCode(StatusCode::OK), [
+      "data" => $directoryReader->readFile()
+    ]);
+    return $response;
   }
 
   public static function showBody()
   {
-    Response::appendResponse("data", Request::getBody());
+    $response = new JsonResponse(new StatusCode(StatusCode::OK), [
+      "data" => Request::getBody()
+    ]);
+    return $response;
   }
 }

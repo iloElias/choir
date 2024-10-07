@@ -4,28 +4,28 @@ namespace Ilias\Choir\Bootstrap;
 
 use Ilias\Dotenv\Environment;
 use Ilias\Dotenv\Exceptions\EnvironmentNotFound;
-use Ilias\Opherator\MetaData;
+use Ilias\Opherator\Exceptions\InvalidResponseException;
+use Ilias\Opherator\JsonResponse;
+use Ilias\Opherator\Opherator;
 use Ilias\Opherator\Request;
-use Ilias\Opherator\Request\StatusCode;
 use Ilias\Opherator\Response;
+use Ilias\Opherator\Request\StatusCode;
 use Ilias\Rhetoric\Exceptions\MiddlewareException;
 use Ilias\Rhetoric\Exceptions\RouteNotFoundException;
 use Ilias\Rhetoric\Router\Router;
 
 class Core
 {
-
   public static function handle(array $params = [])
   {
+    /* Request handling example */
     try {
       Environment::setup(null, Environment::SUPPRESS_EXCEPTION);
       Request::setup();
 
-      $metaData = new MetaData();
-      Response::setHeader($metaData->getContentType(MetaData::CONTENT_TYPE_JSON), true);
-      Router::setup();
-
-      Response::appendResponse("status", http_response_code(), true);
+      Opherator::toggleResponseExceptions();
+      Response::jsonResponse();
+      Response::setResponse(Router::handle() ?? []);
 
       Response::answer();
     } catch (EnvironmentNotFound $environmentNotFoundEx) {
@@ -39,36 +39,40 @@ class Core
     }
   }
 
-  public static function handleEnvironmentException(EnvironmentNotFound $environmentNotFoundEx)
+  public static function handleEnvironmentException(EnvironmentNotFound $environmentNotFoundEx): void
   {
-    http_response_code(StatusCode::NOT_FOUND);
-    Response::appendResponse("message", empty($environmentNotFoundEx->getMessage()) ? 'No environment file found' : $environmentNotFoundEx->getMessage());
-    Response::appendResponse("status", http_response_code());
+    $response = new JsonResponse(new StatusCode(StatusCode::NOT_FOUND), [
+      'message' => empty($environmentNotFoundEx->getMessage()) ? 'No environment file found' : $environmentNotFoundEx->getMessage()
+    ]);
+    Response::setResponse($response);
     Response::answer();
   }
 
-  public static function handleRouteException(RouteNotFoundException $notFoundEx)
+  public static function handleRouteException(RouteNotFoundException $notFoundEx): void
   {
-    http_response_code(StatusCode::NOT_FOUND);
-    Response::appendResponse("message", empty($notFoundEx->getMessage()) ? 'Route not found' : $notFoundEx->getMessage());
-    Response::appendResponse("status", http_response_code());
+    $response = new JsonResponse(new StatusCode(StatusCode::NOT_FOUND), [
+      'message' => empty($notFoundEx->getMessage()) ? 'Route not found' : $notFoundEx->getMessage()
+    ]);
+    Response::setResponse($response);
     Response::answer();
   }
 
-  public static function handleMiddlewareException(MiddlewareException $midEx)
+  public static function handleMiddlewareException(MiddlewareException $midEx): void
   {
-    http_response_code(StatusCode::UNAUTHORIZED);
-    Response::appendResponse("message", empty($midEx->getMessage()) ? 'Route middleware terms not met' : $midEx->getMessage());
-    Response::appendResponse("status", http_response_code());
+    $response = new JsonResponse(new StatusCode(StatusCode::UNAUTHORIZED), [
+      'message' => empty($midEx->getMessage()) ? 'Route middleware terms not met' : $midEx->getMessage()
+    ]);
+    Response::setResponse($response);
     Response::answer();
   }
 
-  public static function handleException(\Throwable $th)
+  public static function handleException(\Throwable $th): void
   {
-    http_response_code(StatusCode::INTERNAL_SERVER_ERROR);
-    Response::appendResponse("message", empty($th->getMessage()) ? 'No error message provided' : $th->getMessage());
-    Response::appendResponse("status", http_response_code());
-    Response::appendResponse("exception", $th);
+    $response = new JsonResponse(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR), [
+      'message' => empty($th->getMessage()) ? 'No error message provided' : $th->getMessage(),
+      'exception' => $th
+    ]);
+    Response::setResponse($response);
     Response::answer();
   }
 }
