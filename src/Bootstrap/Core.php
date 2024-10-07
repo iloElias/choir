@@ -26,8 +26,6 @@ class Core
       Opherator::toggleResponseExceptions();
       Response::jsonResponse();
       Response::setResponse(Router::handle() ?? []);
-
-      Response::answer();
     } catch (EnvironmentNotFound $environmentNotFoundEx) {
       self::handleEnvironmentException($environmentNotFoundEx);
     } catch (RouteNotFoundException $notFoundEx) {
