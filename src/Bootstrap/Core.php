@@ -37,6 +37,7 @@ class Core
     } catch (\Throwable $th) {
       self::handleException($th);
     }
+    Response::answer();
   }
 
   public static function handleEnvironmentException(EnvironmentNotFound $environmentNotFoundEx): void
@@ -45,7 +46,6 @@ class Core
       'message' => empty($environmentNotFoundEx->getMessage()) ? 'No environment file found' : $environmentNotFoundEx->getMessage()
     ]);
     Response::setResponse($response);
-    Response::answer();
   }
 
   public static function handleRouteException(RouteNotFoundException $notFoundEx): void
@@ -54,7 +54,6 @@ class Core
       'message' => empty($notFoundEx->getMessage()) ? 'Route not found' : $notFoundEx->getMessage()
     ]);
     Response::setResponse($response);
-    Response::answer();
   }
 
   public static function handleMiddlewareException(MiddlewareException $midEx): void
@@ -63,7 +62,6 @@ class Core
       'message' => empty($midEx->getMessage()) ? 'Route middleware terms not met' : $midEx->getMessage()
     ]);
     Response::setResponse($response);
-    Response::answer();
   }
 
   public static function handleException(\Throwable $th): void
@@ -73,6 +71,5 @@ class Core
       'exception' => $th
     ]);
     Response::setResponse($response);
-    Response::answer();
   }
 }
