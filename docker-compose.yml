@@ -24,6 +24,20 @@ services:
     networks:
       - app-network
 
+  postgres:
+    container_name: choir_postgres
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

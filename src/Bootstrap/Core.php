@@ -2,8 +2,11 @@
 
 namespace Ilias\Choir\Bootstrap;
 
+use Ilias\Choir\Model\System\ErrorLog;
 use Ilias\Dotenv\Environment;
 use Ilias\Dotenv\Exceptions\EnvironmentNotFound;
+use Ilias\Maestro\Database\Insert;
+use Ilias\Maestro\Types\Timestamp;
 use Ilias\Opherator\Exceptions\InvalidResponseException;
 use Ilias\Opherator\JsonResponse;
 use Ilias\Opherator\Opherator;
@@ -16,6 +19,7 @@ use Ilias\Rhetoric\Router\Router;
 
 class Core
 {
+  private static array $errors = [];
   public static function handle(array $params = [])
   {
     /* Request handling example */
@@ -36,6 +40,33 @@ class Core
       self::handleException($th);
     }
     Response::answer();
+  }
+
+  public static function errorHandler($errno, $errstr, $errfile, $errline)
+  {
+    self::$errors[] = [
+      'type' => $errno,
+      'message' => $errstr,
+      'file' => $errfile,
+      'line' => $errline
+    ];
+    return false;
+  }
+
+  public static function dispatch()
+  {
+    Response::answer();
+    if (!empty(self::$errors)) {
+      $error = new ErrorLog(
+        json_encode(self::$errors),
+        json_encode(['query' => Request::getQuery(), 'body' => Request::getBody()]),
+        new Timestamp()
+      );
+      $insert = new Insert();
+      $insert->into($error::class)
+        ->values($error)
+        ->execute();
+    }
   }
 
   public static function handleEnvironmentException(EnvironmentNotFound $environmentNotFoundEx): void
